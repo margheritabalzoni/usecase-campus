@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 
 import org.example.ontology.PersonOntology;
 import org.example.ontology.RoomOntology;
+import org.example.physicalAdapter.CampusPA;
 import org.example.physicalAdapter.PersonPA;
 import org.example.physicalAdapter.RoomPA;
 import org.example.shadowingFunction.UseCaseShadowingFunction;
@@ -106,8 +107,9 @@ public final class Launcher {
             ));
 
             final DigitalTwin campusDT = new DigitalTwin(campusDTId, new UseCaseShadowingFunction());
-            campusDT.addPhysicalAdapter(new RoomPA(
-                System.getenv(PERSON_URI_VARIABLE)
+            campusDT.addPhysicalAdapter(new CampusPA(
+                System.getenv(ROOM_1_URI_VARIABLE),
+                System.getenv(ROOM_2_URI_VARIABLE)
             ));
             campusDT.addDigitalAdapter(new WoDTDigitalAdapter(
                     "wodt-dt-campus-adapter",

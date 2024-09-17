@@ -12,7 +12,7 @@ public class CampusPA extends PhysicalAdapter{
 
     private static final int STARTUP_TIME = 2000;
     private static final String RELATIONSHIP_ID = "contains-room";
-    private final PhysicalAssetRelationship<String> containsRoom = new PhysicalAssetRelationship<>(RELATIONSHIP_ID, "type"); //cambia type
+    private final PhysicalAssetRelationship<String> containsRoom = new PhysicalAssetRelationship<>(RELATIONSHIP_ID, "contains"); 
     private final String room1Uri;
     private final String room2Uri;
 
