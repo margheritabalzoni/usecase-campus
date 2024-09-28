@@ -27,7 +27,6 @@ import org.example.shadowingFunction.UseCaseShadowingFunction;
 
 public final class Launcher {
 
-    private static final String PERSON_URI_VARIABLE = "PERSON_URI";
     private static final String ROOM_1_URI_VARIABLE = "ROOM_1_URI";
     private static final String ROOM_2_URI_VARIABLE = "ROOM_2_URI";
     private static final String PERSON_EXPOSED_PORT_VARIABLE = "PERSON_EXPOSED_PORT";
@@ -39,7 +38,6 @@ public final class Launcher {
 
     static {
        
-        Objects.requireNonNull(System.getenv(PERSON_URI_VARIABLE), "Please provide the person uri");
         Objects.requireNonNull(System.getenv(ROOM_1_URI_VARIABLE), "Please provide the room 1 uri");
         Objects.requireNonNull(System.getenv(ROOM_2_URI_VARIABLE), "Please provide the room 2 uri");
         Objects.requireNonNull(System.getenv(PERSON_EXPOSED_PORT_VARIABLE), "Please provide the exposed port");
@@ -68,7 +66,10 @@ public final class Launcher {
             final int campusPortNumber = Integer.parseInt(System.getenv(CAMPUS_EXPOSED_PORT_VARIABLE));
 
             final DigitalTwin personDT = new DigitalTwin(personDTId, new UseCaseShadowingFunction());
-            personDT.addPhysicalAdapter(new PersonPA());
+            personDT.addPhysicalAdapter(new PersonPA(
+                System.getenv(ROOM_1_URI_VARIABLE),
+                System.getenv(ROOM_2_URI_VARIABLE)
+            ));
             personDT.addDigitalAdapter(new WoDTDigitalAdapter("wodt-dt-person-digital-adapter",
                 new WoDTDigitalAdapterConfiguration(
                             "http://localhost:" + personPortNumber + "/",
@@ -79,9 +80,7 @@ public final class Launcher {
             ));
 
             final DigitalTwin room1DT = new DigitalTwin(room1DTId, new UseCaseShadowingFunction());
-            room1DT.addPhysicalAdapter(new RoomPA(
-                System.getenv(PERSON_URI_VARIABLE)
-            ));
+            room1DT.addPhysicalAdapter(new RoomPA());
             room1DT.addDigitalAdapter(new WoDTDigitalAdapter(
                     "wodt-dt-room1-adapter",
                     new WoDTDigitalAdapterConfiguration(
@@ -93,9 +92,7 @@ public final class Launcher {
             ));
 
             final DigitalTwin room2DT = new DigitalTwin(room2DTId, new UseCaseShadowingFunction());
-            room2DT.addPhysicalAdapter(new RoomPA(
-                System.getenv(PERSON_URI_VARIABLE)
-            ));
+            room2DT.addPhysicalAdapter(new RoomPA());
             room2DT.addDigitalAdapter(new WoDTDigitalAdapter(
                     "wodt-dt-room2-adapter",
                     new WoDTDigitalAdapterConfiguration(
