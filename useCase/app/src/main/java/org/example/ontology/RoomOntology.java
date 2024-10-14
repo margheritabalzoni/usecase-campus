@@ -14,7 +14,7 @@ import io.github.webbasedwodt.model.ontology.Property;
 public class RoomOntology implements DTOntology {
 
     private static final Map<String, Pair<String, String>> PROPERTY_MAP = Map.of(
-        "room-name", Pair.of("http://xmlns.com/foaf/spec/#name", "http://www.w3.org/2000/01/rdf-schema")
+        "room-name", Pair.of("http://xmlns.com/foaf/spec/#name", "https://www.w3.org/2001/XMLSchema#string")
     );
 
     @Override

@@ -17,7 +17,8 @@ public class CampusOntology implements DTOntology {
     );
 
     private static final Map<String, Pair<String, String>> PROPERTY_MAP = Map.of(
-         "address", Pair.of("https://brickschema.org/schema/1.4/Brick", "https://www.w3.org/2001/XMLSchema#string")
+         "address", Pair.of("https://brickschema.org/schema/1.4/Brick", "https://www.w3.org/2001/XMLSchema#string"),
+         "name", Pair.of("http://xmlns.com/foaf/spec/#name","https://www.w3.org/2001/XMLSchema#string" )
     );
 
     @Override

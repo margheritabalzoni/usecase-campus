@@ -18,6 +18,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import org.example.ontology.CampusOntology;
 import org.example.ontology.PersonOntology;
 import org.example.ontology.RoomOntology;
 import org.example.physicalAdapter.CampusPA;
@@ -80,7 +81,7 @@ public final class Launcher {
             ));
 
             final DigitalTwin room1DT = new DigitalTwin(room1DTId, new UseCaseShadowingFunction());
-            room1DT.addPhysicalAdapter(new RoomPA());
+            room1DT.addPhysicalAdapter(new RoomPA("AULA 2.4"));
             room1DT.addDigitalAdapter(new WoDTDigitalAdapter(
                     "wodt-dt-room1-adapter",
                     new WoDTDigitalAdapterConfiguration(
@@ -92,7 +93,7 @@ public final class Launcher {
             ));
 
             final DigitalTwin room2DT = new DigitalTwin(room2DTId, new UseCaseShadowingFunction());
-            room2DT.addPhysicalAdapter(new RoomPA());
+            room2DT.addPhysicalAdapter(new RoomPA("LAB.3.1"));
             room2DT.addDigitalAdapter(new WoDTDigitalAdapter(
                     "wodt-dt-room2-adapter",
                     new WoDTDigitalAdapterConfiguration(
@@ -112,7 +113,7 @@ public final class Launcher {
                     "wodt-dt-campus-adapter",
                     new WoDTDigitalAdapterConfiguration(
                             "http://localhost:" + campusPortNumber + "/",
-                            new RoomOntology(),
+                            new CampusOntology(),
                             campusPortNumber,
                             "campus-physiscal-adapter",
                             Set.of(URI.create(System.getenv(PLATFORM_URL_VARIABLE))))

@@ -15,10 +15,11 @@ import it.wldt.exception.PhysicalAdapterException;
 public class PersonPA extends PhysicalAdapter{
 
     private static final String ROOM_RELATION_KEY = "person-in-room";
-    private static final String IS_IN_ROOM_PROPERTY_KEY = "is-in-room";
     private static final String NOT_IN_ANY_ROOM = "";
+    private static final String NAME_PROPERTY_KEY  = "first-name";
+    private static final String LAST_NAME_PRPERTY_KEY = "last-name" ;
 
-     private final PhysicalAssetRelationship<String> containsPerson = new PhysicalAssetRelationship<>(ROOM_RELATION_KEY, "contains");
+     private final PhysicalAssetRelationship<String> containsPerson = new PhysicalAssetRelationship<>(ROOM_RELATION_KEY, "person-in-room");
     String room1Uri;
     String room2Uri;
     String currentRoom = NOT_IN_ANY_ROOM;
@@ -38,8 +39,11 @@ public class PersonPA extends PhysicalAdapter{
     public void onAdapterStart() {
         try{
             PhysicalAssetDescription pad = new PhysicalAssetDescription();
-            PhysicalAssetProperty<String> isInRoomProperty = new PhysicalAssetProperty<String>(IS_IN_ROOM_PROPERTY_KEY, currentRoom);
-            pad.getProperties().add(isInRoomProperty);
+            pad.getRelationships().add(this.containsPerson);
+            PhysicalAssetProperty<String> firstName = new PhysicalAssetProperty<String>(NAME_PROPERTY_KEY, "Margherita");
+            PhysicalAssetProperty<String> lastName = new PhysicalAssetProperty<String>(LAST_NAME_PRPERTY_KEY, "Balzoni");
+            pad.getProperties().add(firstName);
+            pad.getProperties().add(lastName);
 
         
 
@@ -59,11 +63,11 @@ public class PersonPA extends PhysicalAdapter{
     }
 
     public void updateRoomRelationship(String uri){
-          try {
+     try {
         
         if (!uri.equals(NOT_IN_ANY_ROOM)) {
             
-            if (currentRoom != NOT_IN_ANY_ROOM && !currentRoom.equals(uri)) {
+            if (!currentRoom.equals(uri)) {
                 
                 if (!currentRoom.equals(NOT_IN_ANY_ROOM)) {
                     publishPhysicalAssetRelationshipDeletedWldtEvent(
@@ -71,9 +75,8 @@ public class PersonPA extends PhysicalAdapter{
                     );
                 }
                 
-                PhysicalAssetRelationshipInstance<String> newRelationshipInstance = containsPerson.createRelationshipInstance(uri);
                 publishPhysicalAssetRelationshipCreatedWldtEvent(
-                    new PhysicalAssetRelationshipInstanceCreatedWldtEvent<>(newRelationshipInstance)
+                    new PhysicalAssetRelationshipInstanceCreatedWldtEvent<>(containsPerson.createRelationshipInstance(uri))
                 );
                 currentRoom = uri; 
             }
@@ -81,14 +84,14 @@ public class PersonPA extends PhysicalAdapter{
             
             if (!currentRoom.equals(NOT_IN_ANY_ROOM)) {
                 publishPhysicalAssetRelationshipDeletedWldtEvent(
-                    new PhysicalAssetRelationshipInstanceDeletedWldtEvent<>(containsPerson.createRelationshipInstance(currentRoom))
+                    new PhysicalAssetRelationshipInstanceDeletedWldtEvent<>(containsPerson.createRelationshipInstance(uri))
                 );
                 currentRoom = NOT_IN_ANY_ROOM; 
-            }
+            } 
         }
-    }catch(Exception e){
+     }catch(Exception e){
         e.printStackTrace();
-    }
+     }
 
 }
 

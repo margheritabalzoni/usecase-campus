@@ -14,13 +14,12 @@ import io.github.webbasedwodt.model.ontology.Property;
 public class PersonOntology implements DTOntology{
 
     private static final Map<String, Pair<String, String>> PROPERTY_MAP = Map.of(
-        "is-occupied", Pair.of("https://wodtcampusontology.com/ontology#isOccupied", "https://www.w3.org/2001/XMLSchema#boolean"),
         "first-name", Pair.of("http://xmlns.com/foaf/spec/#term_firstName", "https://www.w3.org/2001/XMLSchema#string"),
         "last-name", Pair.of("http://xmlns.com/foaf/spec/#term_familyName", "https://www.w3.org/2001/XMLSchema#string")
     );
 
      private static final Map<String, Pair<String, String>> RELATIONSHIP_MAP = Map.of(
-        "contains-person", Pair.of("https://wodtcampusontology.com/ontology#containsPerson", "https://wodtcampusontology.com/ontology#Person")
+        "person-in-room", Pair.of("https://wodtcampusontology.com/ontology#inRoom", "https://wodtcampusontology.com/ontology#Room")
     );
 
     @Override
