@@ -26,7 +26,7 @@ dependencies {
 
     // WLDT Core and WoDT Adapter dependencies.
     implementation("io.github.wldt:wldt-core:0.4.0")
-    implementation("io.github.webbasedwodt:wldt-wodt-adapter:4.0.0")
+    implementation("io.github.webbasedwodt:wldt-wodt-adapter:4.1.0")
 }
 
 java {

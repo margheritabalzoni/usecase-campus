@@ -5,7 +5,6 @@ import it.wldt.adapter.physical.PhysicalAssetDescription;
 
 import it.wldt.adapter.physical.PhysicalAssetProperty;
 import it.wldt.adapter.physical.PhysicalAssetRelationship;
-import it.wldt.adapter.physical.PhysicalAssetRelationshipInstance;
 import it.wldt.adapter.physical.event.PhysicalAssetActionWldtEvent;
 import it.wldt.adapter.physical.event.PhysicalAssetRelationshipInstanceCreatedWldtEvent;
 import it.wldt.adapter.physical.event.PhysicalAssetRelationshipInstanceDeletedWldtEvent;
@@ -84,7 +83,7 @@ public class PersonPA extends PhysicalAdapter{
             
             if (!currentRoom.equals(NOT_IN_ANY_ROOM)) {
                 publishPhysicalAssetRelationshipDeletedWldtEvent(
-                    new PhysicalAssetRelationshipInstanceDeletedWldtEvent<>(containsPerson.createRelationshipInstance(uri))
+                    new PhysicalAssetRelationshipInstanceDeletedWldtEvent<>(containsPerson.createRelationshipInstance(currentRoom))
                 );
                 currentRoom = NOT_IN_ANY_ROOM; 
             } 
