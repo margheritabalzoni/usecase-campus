@@ -9,6 +9,8 @@ import it.wldt.adapter.physical.event.PhysicalAssetRelationshipInstanceCreatedWl
 import it.wldt.adapter.physical.event.PhysicalAssetRelationshipInstanceDeletedWldtEvent;
 import it.wldt.core.model.ShadowingFunction;
 import it.wldt.core.state.DigitalTwinStateAction;
+import it.wldt.core.state.DigitalTwinStateEvent;
+import it.wldt.core.state.DigitalTwinStateEventNotification;
 import it.wldt.core.state.DigitalTwinStateProperty;
 import it.wldt.core.state.DigitalTwinStateRelationship;
 import it.wldt.core.state.DigitalTwinStateRelationshipInstance;
@@ -55,7 +57,14 @@ public class UseCaseShadowingFunction extends ShadowingFunction {
 
     @Override
     protected void onPhysicalAssetEventNotification(final PhysicalAssetEventWldtEvent<?> physicalAssetEventWldtEvent) {
-
+        try {
+            this.digitalTwinStateManager.notifyDigitalTwinStateEvent(new DigitalTwinStateEventNotification<>(
+                    physicalAssetEventWldtEvent.getPhysicalEventKey(),
+                    physicalAssetEventWldtEvent.getBody(),
+                    physicalAssetEventWldtEvent.getCreationTimestamp()));
+        } catch (Exception e) {
+            Logger.getLogger(UseCaseShadowingFunction.class.getName()).info(e.getMessage());;
+        }
     }
 
     @Override
@@ -124,10 +133,7 @@ public class UseCaseShadowingFunction extends ShadowingFunction {
             adaptersPhysicalAssetDescriptionMap.values().forEach(pad -> {
                 pad.getProperties().forEach(property -> {
                     try {
-                        this.digitalTwinStateManager.createProperty(new DigitalTwinStateProperty<>(
-                                property.getKey(),
-                                property.getInitialValue())
-                        );
+                        this.digitalTwinStateManager.createProperty(new DigitalTwinStateProperty<>(property.getKey(),property.getInitialValue()));
                         this.observePhysicalAssetProperty(property);
                     } catch (EventBusException | ModelException | WldtDigitalTwinStateException e) {
                         Logger.getLogger(UseCaseShadowingFunction.class.getName()).info(e.getMessage());
@@ -148,17 +154,27 @@ public class UseCaseShadowingFunction extends ShadowingFunction {
                         Logger.getLogger(UseCaseShadowingFunction.class.getName()).info(e.getMessage());
                     }
                 });
-
+               //Iterate over available declared Physical Relationship for the target Physical Adapter's PAD
                 pad.getRelationships().forEach(relationship -> {
                     try {
                         if (relationship != null) {
-                            this.digitalTwinStateManager.createRelationship(
-                                    new DigitalTwinStateRelationship<>(
-                                            relationship.getName(),
-                                            relationship.getName()
-                                    )
-                            );
+
+                            DigitalTwinStateRelationship dtStateRelationship = new DigitalTwinStateRelationship(relationship.getName(),
+                            relationship.getName());
+                            this.digitalTwinStateManager.createRelationship(dtStateRelationship);
                             observePhysicalAssetRelationship(relationship);
+                        }
+                    } catch (EventBusException | ModelException | WldtDigitalTwinStateException e) {
+                        Logger.getLogger(UseCaseShadowingFunction.class.getName()).info(e.getMessage());
+                    }
+                });
+                //Iterate over available declared Physical Events for the target Physical Adapter's PAD
+                pad.getEvents().forEach(event -> {
+                    try {
+                        if (event != null) {
+                            DigitalTwinStateEvent dtStateEvent = new DigitalTwinStateEvent(event.getKey(), event.getType());
+                            this.digitalTwinStateManager.registerEvent(dtStateEvent);
+                            this.observePhysicalAssetEvent(event);
                         }
                     } catch (EventBusException | ModelException | WldtDigitalTwinStateException e) {
                         Logger.getLogger(UseCaseShadowingFunction.class.getName()).info(e.getMessage());
